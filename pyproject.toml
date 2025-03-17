@@ -1,0 +1,132 @@
+[tool.poetry]
+name = "evrone-test-project"
+version = "0.1.0"
+description = "Test project for Evrone"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+fastapi = "0.115.11"
+uvicorn = "^0.32.0"
+sqlalchemy = "^2.0.25"
+alembic = "^1.12.1"
+asyncpg = "0.30.0"
+greenlet = "3.1.1"
+aiokafka = "0.12.0"
+python-multipart = "^0.0.19"
+faster-whisper = "1.1.1"
+loguru = "0.7.3"
+pydantic = "2.10"
+pydantic-settings = "2.6.1"
+redis = "^4.2.0"
+ruff = "0.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+### LINT config ###
+[tool.ruff]
+lint.select = ["N", "B", "A", "E", "W", "F", "ASYNC", "S", "D", "I"]
+lint.ignore = [
+  "PT001",
+  "D100",
+  "D101",
+  "D102",
+  "D103",
+  "D107",
+  "D104",
+  "W293",
+  "S101",
+  "D212",
+  "D200",
+  "UP007",
+  "S105",
+  "S311",
+]
+
+line-length = 120
+
+extend-exclude = [
+  "*pb2*",
+  ".git",
+  "__pycache__",
+  "build",
+  "dist",
+  "__init__.py",
+  "*random*",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["id"]
+
+[tool.mypy]
+packages = ["src", "tests"]   # Измените директории, если это нужно
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+### TEST config ###
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.4.0"
+pytest-mock = "3.14.0"
+pytest-cov = "6.0.0"
+pytest-asyncio = "^0.15.1"
+
+[tool.pytest.ini_options]
+# Указать дополнительные опции запуска
+addopts = "-s -vvv --cov=src --cov-report term --cov-report html --tb=short --strict-markers"
+
+# Указать директорию для поиска тестов
+testpaths = [
+    "tests",
+]
+
+# Настроить маркеры для управления тестами
+markers = [
+    "unit: тесты уровня unit (юнит-тесты)",
+    "integration: тесты уровня integration (интеграционные тесты)",
+    "e2e: end-to-end тесты",
+    "slow: тесты, которые занимают много времени",
+    "smoke: быстрые проверки основной функциональности",
+]
+
+# Настроить кодировку и файлы для тестирования
+python_files = [
+    "test_*.py",
+    "*_test.py",
+]
+python_classes = [
+    "Test*",
+]
+python_functions = [
+    "test_*",
+]
+
+# Указать директории и файлы, которые следует игнорировать
+norecursedirs = [
+    ".git",
+    "venv",
+    "node_modules",
+    "__pycache__",
+]
+
+# Лимит на длину строки в отчетах
+console_output_style = "progress"
+
+# Путь для временных файлов и артефактов
+cache_dir = ".pytest_cache"
+
+# Путь до папки src для доступа к модулям проекта
+pythonpath = [
+    "src",
+]
